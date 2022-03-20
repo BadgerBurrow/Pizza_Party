@@ -7,10 +7,8 @@ import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlin.math.ceil
 
 const val TAG = "MainActivitym"
-const val SLICES_PER_PIZZA = 8
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,16 +34,20 @@ class MainActivity : AppCompatActivity() {
         // Convert the text into an integer
         val numAttend = numAttendStr.toIntOrNull() ?: 0
 
-        // Determine how many slices on average each person will eat
-        val slicesPerPerson = when (howHungryRadioGroup.checkedRadioButtonId) {
-            R.id.light_radio_button -> 2
-            R.id.medium_radio_button -> 3
-            else -> 4
+        // Get hunger level selection
+        val hungerLevel = when (howHungryRadioGroup.getCheckedRadioButtonId()) {
+            R.id.light_radio_button -> PizzaCalculator.HungerLevel.LIGHT
+            R.id.medium_radio_button -> PizzaCalculator.HungerLevel.MEDIUM
+            else -> PizzaCalculator.HungerLevel.RAVENOUS
         }
 
-        // Calculate and show the number of pizzas needed
-        val totalPizzas = ceil(numAttend * slicesPerPerson / SLICES_PER_PIZZA.toDouble()).toInt()
-        numPizzasTextView.text = "Total pizzas: $totalPizzas"
+        // Get the number of pizzas needed
+        val calc = PizzaCalculator(numAttend, hungerLevel)
+        val totalPizzas = calc.totalPizzas
+
+        // Place totalPizzas into the string resource and display
+        val totalText = getString(R.string.total_pizzas, totalPizzas)
+        numPizzasTextView.setText(totalText)
     }
 }
 
