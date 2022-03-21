@@ -53,3 +53,6 @@ class MainActivity : AppCompatActivity() {
 
 //adding a cool comment
 //adding another one ok
+
+//new comment test test tes 123 abc
+//hellloooooooo...
